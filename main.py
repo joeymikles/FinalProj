@@ -27,6 +27,48 @@ if answer.lower()=='yes':
     else:
         print('Wrong Answer :(')
     
+    answer=input('Question 4: What year did the Jets win their last Super Bowl?')
+    if answer.lower()=='1969':
+        score += 1
+        print('correct')
+    else:
+        print('Wrong Answer :(')
+
+    answer=input('Question 5: Who did the Jets draft at 4th overall in last years draft?')
+    if answer.lower()=='Sauce Gardner':
+        score += 1
+        print('correct')
+    else:
+        print('Wrong Answer :(')
+
+    answer=input('Question 6: Who tore theri ACL this season?')
+    if answer.lower()=='Breece Hall':
+        score += 1
+        print('correct')
+    else:
+        print('Wrong Answer :(')
+
+    answer=input('Question 7: What numner is DJ Reed')
+    if answer.lower()=='4':
+        score += 1
+        print('correct')
+    else:
+        print('Wrong Answer :(')
+
+    answer=input('Question 8: Do the Jets have the longest playoff drought?')
+    if answer.lower()=='Yes':
+        score += 1
+        print('correct')
+    else:
+        print('Wrong Answer :(')
+        
+    
+    
+    
+    
+    
+
+    
    #im gonna add more questions to this and put an image at the end when the quiz is over
 
     
@@ -38,7 +80,7 @@ mark=(score/total_questions)*100
 print('Marks obtained:',mark)
 print('Thank you for playing')
 
-# keeps the loop running, im working on making it so you can redo it mmm
+# keeps the loop running, im working on making it so you can redo it
 running = True
 
 
