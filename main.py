@@ -1,92 +1,180 @@
-# intros the game asking if you wanna play and how many questions there are, defining them
-print('Welcome to the New York Jets Quiz')
-answer=input('Are you ready to play ? (yes/no) :')
-score=0
-total_questions=3
- #these three segments below are the same, asking the question and giving an answer with feedback
-if answer.lower()=='yes':
-    answer=input('Question 1: What number is Breece Hall ?')
-    if answer.lower()=='20':
-        score += 1
-        print('correct')
-    else:
-        print('Wrong Answer :(')
- 
- 
-    answer=input('Question 2: Are the Raiders a good football team? ')
-    if answer.lower()=='no':
-        score += 1
-        print('correct')
-    else:
-        print('Wrong Answer :(')
- 
-    answer=input('Question 3: Who is better, Zach Wilson or Derek Carr?')
-    if answer.lower()=='Zach Wilson':
-        score += 1
-        print('correct')
-    else:
-        print('Wrong Answer :(')
-    
-    answer=input('Question 4: What year did the Jets win their last Super Bowl?')
-    if answer.lower()=='1969':
-        score += 1
-        print('correct')
-    else:
-        print('Wrong Answer :(')
+#https://www.patreon.com/posts/45998588
 
-    answer=input('Question 5: Who did the Jets draft at 4th overall in last years draft?')
-    if answer.lower()=='Sauce Gardner':
-        score += 1
-        print('correct')
-    else:
-        print('Wrong Answer :(')
+# import libraries
+import turtle
+import random
+import time
+from tkinter import *
+import tkinter as tk
+master = tk.Tk()
+bgimg= tk.PhotoImage(file = "C:\\Users\\J.Mikles23\\OneDrive - Bellarmine College Preparatory\\ComputerClass\\game\\JETS_files\\New_York_Jets_logo.svg.png")
 
-    answer=input('Question 6: Who tore theri ACL this season?')
-    if answer.lower()=='Breece Hall':
-        score += 1
-        print('correct')
-    else:
-        print('Wrong Answer :(')
+limg= Label(master, i=bgimg)
+limg.pack()
+master.mainloop()
 
-    answer=input('Question 7: What numner is DJ Reed')
-    if answer.lower()=='4':
-        score += 1
-        print('correct')
-    else:
-        print('Wrong Answer :(')
 
-    answer=input('Question 8: Do the Jets have the longest playoff drought?')
-    if answer.lower()=='Yes':
-        score += 1
-        print('correct')
-    else:
-        print('Wrong Answer :(')
+#make the screen
+screen = turtle.screen()
+screen.title('Joey Snake Game')
+screen.setup(width = 850, height = 850)
+screen.tracer(0)
+turtle.bgcolor('green')
+
+
+
+#create borders
+
+turtle.speed(10)
+turtle.pensize(4)
+turtle.penup()
+turtle.goto(-310,250)
+turtle.pendown()
+turtle.color('black')
+turtle.forward(600)
+turtle.right(90)
+turtle.forward(500)
+turtle.right(90)
+turtle.forward(600)
+turtle.right(90)
+turtle.forward(500)
+turtle.penup()
+turtle.hideturtle()
+
+#scoring
+score = 0
+delay = 0.2
+
+
+#snake information
+snake = turtle.Turtle()
+snake.speed(20)
+snake.shape('square')
+snake.color("black")
+snake.penup()
+snake.goto(0,0)
+snake.direction = 'stop'
+
+
+#food information
+fruit = turtle.Turtle()
+fruit.speed(0)
+fruit.shape('circle')
+fruit.color('red')
+fruit.penup()
+fruit.goto(30,30)
+
+old_fruit=[]
+
+#scoring information
+scoring = turtle.Turtle()
+scoring.speed(0)
+scoring.color("black")
+scoring.penup()
+scoring.hideturtle()
+scoring.goto(0,300)
+scoring.write("Score :",align="center",font=("Courier",24,"bold"))
+
+
+#control instructions
+def snake_go_up():
+    if snake.direction != "down":
+        snake.direction = "up"
+
+def snake_go_down():
+    if snake.direction != "up":
+        snake.direction = "down"
+
+def snake_go_left():
+    if snake.direction != "right":
+        snake.direction = "left"
+
+def snake_go_right():
+    if snake.direction != "left":
+        snake.direction = "right"
+
+def snake_move():
+    if snake.direction == "up":
+        y = snake.ycor()
+        snake.sety(y + 20)
+
+    if snake.direction == "down":
+        y = snake.ycor()
+        snake.sety(y - 20)
+
+    if snake.direction == "left":
+        x = snake.xcor()
+        snake.setx(x - 20)
+
+    if snake.direction == "right":
+        x = snake.xcor()
+        snake.setx(x + 20)
+
+# direction information
+screen.listen()
+screen.onkeypress(snake_go_up, "Up")
+screen.onkeypress(snake_go_down, "Down")
+screen.onkeypress(snake_go_left, "Left")
+screen.onkeypress(snake_go_right, "Right")
+
+#actual game
+
+while True:
+        screen.update()
+            #snake and fruit coliisions
+        if snake.distance(fruit)< 20:
+                x = random.randint(-290,270)
+                y = random.randint(-240,240)
+                fruit.goto(x,y)
+                scoring.clear()
+                score+=1
+                scoring.write("Score:{}".format(score),align="center",font=("Courier",24,"bold"))
+                delay-=0.001
+                
+                ## creating new_ball
+                new_fruit = turtle.Turtle()
+                new_fruit.speed(0)
+                new_fruit.shape('square')
+                new_fruit.color('red')
+                new_fruit.penup()
+                old_fruit.append(new_fruit)
+                
+
+        #adding their score and the actual apple on the snake
         
-    
-    
-    
-    
-    
+        for index in range(len(old_fruit)-1,0,-1):
+                a = old_fruit[index-1].xcor()
+                b = old_fruit[index-1].ycor()
 
-    
-   #im gonna add more questions to this and put an image at the end when the quiz is over
+                old_fruit[index].goto(a,b)
+                                     
+        if len(old_fruit)>0:
+                a= snake.xcor()
+                b = snake.ycor()
+                old_fruit[0].goto(a,b)
+        snake_move()
 
-    
-    
-
- #after the three questions this is printed to indicated you are done
-print('Thankyou for Playing this small quiz game, you attempted',score,"questions correctly!")
-mark=(score/total_questions)*100
-print('Marks obtained:',mark)
-print('Thank you for playing')
-
-# keeps the loop running, im working on making it so you can redo it
-running = True
+        #when the game ends   
+        if snake.xcor()>280 or snake.xcor()< -300 or snake.ycor()>240 or snake.ycor()<-240:
+                time.sleep(1)
+                screen.clear()
+                screen.bgcolor('turquoise')
+                scoring.goto(0,0)
+                scoring.write("   GAME OVER \n Your Score is {}".format(score),align="center",font=("Courier",30,"bold"))
 
 
-while running:
-    
-    for event in pygame.event.get():
-      if event.type == KEYDOWN:
-          if event.key == K_ESCAPE:
-                running = False
+        ## snake collision
+        for food in old_fruit:
+                if food.distance(snake) < 20:
+                        time.sleep(1)
+                        screen.clear()
+                        screen.bgcolor('turquoise')
+                        scoring.goto(0,0)
+                        scoring.write("    GAME OVER \n Your Score is {}".format(score),align="center",font=("Courier",30,"Times New Roman"))
+
+
+                
+        time.sleep(delay)
+
+turtle.Terminator()
+
