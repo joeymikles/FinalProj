@@ -98,7 +98,7 @@ def s_right():
     if s.dir != (-1,0):
         s.dir = (1,0)
 
-# how does this work( l
+# this describes how the snake will move and how fast it moves is based off of previous code
 def s_move():
     if s.dir == (0,-1):
         y = s.ycor()
