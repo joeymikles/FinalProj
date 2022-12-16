@@ -1,31 +1,40 @@
 #https://www.patreon.com/posts/45998588
+# https://docs.python.org/3/library/turtle.html
+#https://www.youtube.com/watch?v=bzWzlXiavXs
 
 # import libraries
+# turtle is library for graphics
 import turtle
+
+# shorten the turtle to Ttl for time purposes
+from turtle import Turtle as Ttl
+# import random for the function of the food
 import random
+# import time for the snake and fruit
 import time
-from tkinter import *
-import tkinter as tk
-master = tk.Tk()
-bgimg= tk.PhotoImage(file = "C:\\Users\\J.Mikles23\\OneDrive - Bellarmine College Preparatory\\ComputerClass\\game\\JETS_files\\New_York_Jets_logo.svg.png")
+# import os for the image import
+import os
+# import settings to keep the game running
+from settings import *
 
-limg= Label(master, i=bgimg)
-limg.pack()
-master.mainloop()
+# this opens the game folder file
+game_folder = os.path.dirname(__file__)
 
+bgimg = os.path.join(game_folder, 'jets logo.png')
+football = os.path.join(game_folder, 'football.gif')
 
-#make the screen
-screen = turtle.screen()
-screen.title('Joey Snake Game')
-screen.setup(width = 850, height = 850)
+#this creates the screen alon with putting the jets logo as the background
+screen = turtle.Screen()
+screen.title('SNAKE GAME')
+screen.setup(width = 700, height = 700)
 screen.tracer(0)
 turtle.bgcolor('green')
+# specifically uses image as background for game
+screen.bgpic(bgimg)
 
+#makes the border for the snake to stay in
 
-
-#create borders
-
-turtle.speed(10)
+turtle.speed(5)
 turtle.pensize(4)
 turtle.penup()
 turtle.goto(-310,250)
@@ -41,33 +50,31 @@ turtle.forward(500)
 turtle.penup()
 turtle.hideturtle()
 
-#scoring
-score = 0
-delay = 0.2
+# creates the snake and gives it its values
 
+s = Ttl()
+s.speed(0)
+s.shape('square')
+s.color("black")
+s.penup()
+s.goto(0,0)
+s.dir = 'stop'
 
-#snake information
-snake = turtle.Turtle()
-snake.speed(20)
-snake.shape('square')
-snake.color("black")
-snake.penup()
-snake.goto(0,0)
-snake.direction = 'stop'
+# turns the food it eats into footballs
+screen.addshape(football)
 
-
-#food information
-fruit = turtle.Turtle()
+# create
+fruit = Ttl()
 fruit.speed(0)
-fruit.shape('circle')
-fruit.color('red')
+turtle.register_shape(football)
+fruit.shape(football)
+#makes the fruit as the football along with its size
 fruit.penup()
 fruit.goto(30,30)
 
-old_fruit=[]
 
-#scoring information
-scoring = turtle.Turtle()
+#does the scoring along with its placement on the screen
+scoring = Ttl()
 scoring.speed(0)
 scoring.color("black")
 scoring.penup()
@@ -76,105 +83,102 @@ scoring.goto(0,300)
 scoring.write("Score :",align="center",font=("Courier",24,"bold"))
 
 
-#control instructions
-def snake_go_up():
-    if snake.direction != "down":
-        snake.direction = "up"
+# does the movement of the snake, a version of an if statement because if it is going one way it can only go the other
 
-def snake_go_down():
-    if snake.direction != "up":
-        snake.direction = "down"
+def s_down():
+    if s.dir != (0,1):
+        s.dir = (0,-1)
+def s_up():
+    if s.dir != (0,-1):
+        s.dir = (0,1)
+def s_left():
+    if s.dir != (1,0):
+        s.dir = (-1,0)
+def s_right():
+    if s.dir != (-1,0):
+        s.dir = (1,0)
 
-def snake_go_left():
-    if snake.direction != "right":
-        snake.direction = "left"
+# how does this work( l
+def s_move():
+    if s.dir == (0,-1):
+        y = s.ycor()
+        s.sety(y - SNAKE_SPEED)
+    
+    if s.dir == (0,1):
+        y = s.ycor()
+        s.sety(y + SNAKE_SPEED)
+    
+    if s.dir == (-1,0):
+        x = s.xcor()
+        s.setx(x - SNAKE_SPEED)
+    
+    if s.dir == (1,0):
+        x = s.xcor()
+        s.setx(x + SNAKE_SPEED)
 
-def snake_go_right():
-    if snake.direction != "left":
-        snake.direction = "right"
+# input....
 
-def snake_move():
-    if snake.direction == "up":
-        y = snake.ycor()
-        snake.sety(y + 20)
-
-    if snake.direction == "down":
-        y = snake.ycor()
-        snake.sety(y - 20)
-
-    if snake.direction == "left":
-        x = snake.xcor()
-        snake.setx(x - 20)
-
-    if snake.direction == "right":
-        x = snake.xcor()
-        snake.setx(x + 20)
-
-# direction information
 screen.listen()
-screen.onkeypress(snake_go_up, "Up")
-screen.onkeypress(snake_go_down, "Down")
-screen.onkeypress(snake_go_left, "Left")
-screen.onkeypress(snake_go_right, "Right")
+screen.onkeypress(s_up, "Up")
+screen.onkeypress(s_down, "Down")
+screen.onkeypress(s_left, "Left")
+screen.onkeypress(s_right, "Right")
 
-#actual game
+# game loop
 
 while True:
-        screen.update()
-            #snake and fruit coliisions
-        if snake.distance(fruit)< 20:
-                x = random.randint(-290,270)
-                y = random.randint(-240,240)
-                fruit.goto(x,y)
-                scoring.clear()
-                score+=1
-                scoring.write("Score:{}".format(score),align="center",font=("Courier",24,"bold"))
-                delay-=0.001
-                
-                ## creating new_ball
-                new_fruit = turtle.Turtle()
-                new_fruit.speed(0)
-                new_fruit.shape('square')
-                new_fruit.color('red')
-                new_fruit.penup()
-                old_fruit.append(new_fruit)
-                
+    screen.update()
 
-        #adding their score and the actual apple on the snake
+    if s.distance(fruit)< 20:
+        x = random.randint(-290,270)
+        y = random.randint(-240,240)
+        fruit.goto(x,y)
+        scoring.clear()
+        SCORE+=1
+        scoring.write("Score:{}".format(SCORE),align="center",font=("Courier",24,"bold"))
+        DELAY-=0.001
         
-        for index in range(len(old_fruit)-1,0,-1):
-                a = old_fruit[index-1].xcor()
-                b = old_fruit[index-1].ycor()
+        ## creating new_ball
+        new_fruit = Ttl()
+        new_fruit.speed(0)
+        new_fruit.shape(football)
+        # new_fruit.color('red')
+        new_fruit.penup()
+        eaten_fruit.append(new_fruit)
+    # sets eaten fruit coords
+    for index in range(len(eaten_fruit)-1,0,-1):
+        a = eaten_fruit[index-1].xcor()
+        b = eaten_fruit[index-1].ycor()
+        
+        eaten_fruit[index].goto(a,b)
+    # makes eaten fruit follow snake if any is eaten
+    if len(eaten_fruit) > 0:
+        a = s.xcor()
+        b = s.ycor()
+        eaten_fruit[0].goto(a,b)
 
-                old_fruit[index].goto(a,b)
-                                     
-        if len(old_fruit)>0:
-                a= snake.xcor()
-                b = snake.ycor()
-                old_fruit[0].goto(a,b)
-        snake_move()
+    s_move()
 
-        #when the game ends   
-        if snake.xcor()>280 or snake.xcor()< -300 or snake.ycor()>240 or snake.ycor()<-240:
-                time.sleep(1)
-                screen.clear()
-                screen.bgcolor('turquoise')
-                scoring.goto(0,0)
-                scoring.write("   GAME OVER \n Your Score is {}".format(score),align="center",font=("Courier",30,"bold"))
-
-
-        ## snake collision
-        for food in old_fruit:
-                if food.distance(snake) < 20:
-                        time.sleep(1)
-                        screen.clear()
-                        screen.bgcolor('turquoise')
-                        scoring.goto(0,0)
-                        scoring.write("    GAME OVER \n Your Score is {}".format(score),align="center",font=("Courier",30,"Times New Roman"))
+    if s.xcor() > 280 or s.xcor() < -300 or s.ycor()>240 or s.ycor()<-240:
+        time.sleep(1)
+        screen.clear()
+        screen.bgcolor('turquoise')
+        scoring.goto(0,0)
+        scoring.write("   GAME OVER \n Your Score is {}".format(SCORE),align="center",font=("Courier",30,"bold"))
 
 
-                
-        time.sleep(delay)
+            ## snake collision
+    for food in eaten_fruit:
+        if food.distance(s) < 20:
+            time.sleep(1)
+            screen.clear()
+            screen.bgcolor('turquoise')
+            scoring.goto(0,0)
+            scoring.write("    GAME OVER \n Your Score is {}".format(SCORE),align="center",font=("Courier",30,"bold"))
+
+
+    time.sleep(DELAY)
+
 
 turtle.Terminator()
 
